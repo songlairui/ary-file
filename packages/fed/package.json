@@ -25,6 +25,7 @@
     "url": "git+https://github.com/songlairui/ary-file.git"
   },
   "scripts": {
+    "serve": "vue serve src/main.js",
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "bugs": {
