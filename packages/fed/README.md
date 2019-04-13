@@ -1,11 +1,34 @@
-# `@ary-file/fed`
+# fed
 
-> TODO: description
-
-## Usage
-
+## Project setup
 ```
-const fed = require('@ary-file/fed');
-
-// TODO: DEMONSTRATE API
+yarn install
 ```
+
+### Compiles and hot-reloads for development
+```
+yarn run serve
+```
+
+### Compiles and minifies for production
+```
+yarn run build
+```
+
+### Run your tests
+```
+yarn run test
+```
+
+### Lints and fixes files
+```
+yarn run lint
+```
+
+### Run your unit tests
+```
+yarn run test:unit
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
