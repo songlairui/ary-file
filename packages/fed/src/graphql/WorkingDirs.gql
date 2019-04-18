@@ -1,0 +1,7 @@
+#import "./WorkingDirFragment.gql"
+
+query workingDirs {
+  workingDirs {
+    ...WorkingDir
+  }
+}

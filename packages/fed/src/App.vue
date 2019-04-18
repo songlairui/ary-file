@@ -3,6 +3,9 @@
     <a-layout-content :style="{ padding: '0 50px' }">
       <a-breadcrumb :style="{ margin: '16px 0' }">
         <a-breadcrumb-item>
+          <router-link to="/projects">Projects</router-link>
+        </a-breadcrumb-item>
+        <a-breadcrumb-item>
           <router-link to="/">Home</router-link>
         </a-breadcrumb-item>
         <a-breadcrumb-item>

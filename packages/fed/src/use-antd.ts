@@ -10,7 +10,8 @@ import {
   Row,
   Col,
   Button,
-  Checkbox
+  Checkbox,
+  message
 } from 'ant-design-vue';
 
 [
@@ -28,3 +29,5 @@ import {
 ].forEach(inst => {
   Vue.use(inst);
 });
+
+Vue.prototype.$message = message;

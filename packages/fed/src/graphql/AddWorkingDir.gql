@@ -1,0 +1,7 @@
+#import "./WorkingDirFragment.gql"
+
+mutation AddWorkingDir($input: WorkingDirInput) {
+  addWorkingDir(input: $input) {
+    ...WorkingDir
+  }
+}

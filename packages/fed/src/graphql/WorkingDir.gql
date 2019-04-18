@@ -1,0 +1,7 @@
+#import "./WorkingDirFragment.gql"
+
+query workingDir($path: String!) {
+  workingDir(path: $path) {
+    ...WorkingDir
+  }
+}

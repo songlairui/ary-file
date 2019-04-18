@@ -1,0 +1,6 @@
+fragment WorkingDir on WorkingDir {
+  title
+  path
+  desc
+  sort
+}

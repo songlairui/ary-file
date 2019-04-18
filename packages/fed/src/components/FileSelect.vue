@@ -35,6 +35,8 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import infiniteScroll from 'vue-infinite-scroll';
 import { QueryResult } from 'vue-apollo/types/vue-apollo';
 
+import ADD_WORKING_DIR from '../graphql/AddWorkingDir.gql';
+
 const LS = require('../graphql/Ls.gql');
 
 interface Result {
@@ -100,8 +102,21 @@ export default class FileSelect extends Vue {
     this.dir += `/${item.name}`;
     this.getData(true);
   }
-  snap() {
+  async snap() {
     localStorage.setItem('home', this.dir);
+    try {
+      await this.$apollo.mutate({
+        mutation: ADD_WORKING_DIR,
+        variables: {
+          input: {
+            path: this.dir
+          }
+        }
+      });
+      this.$message.info('Favourite Added');
+    } catch (error) {
+      this.$message.error(error.message);
+    }
   }
   up() {
     const arr = this.dir.split('/');
