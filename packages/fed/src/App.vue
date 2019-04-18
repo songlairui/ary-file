@@ -1,11 +1,20 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <a-layout id="components-layout-demo-fixed">
+    <a-layout-content :style="{ padding: '0 50px' }">
+      <a-breadcrumb :style="{ margin: '16px 0' }">
+        <a-breadcrumb-item>
+          <router-link to="/">Home</router-link>
+        </a-breadcrumb-item>
+        <a-breadcrumb-item>
+          <router-link to="/about">About</router-link>
+        </a-breadcrumb-item>
+      </a-breadcrumb>
+      <div :style="{ background: '#fff', padding: '24px', minHeight: '380px' }">
+        <router-view/>
+      </div>
+    </a-layout-content>
+    <a-layout-footer :style="{ textAlign: 'center' }">Ant Design ©2018 Created by Ant UED</a-layout-footer>
+  </a-layout>
 </template>
 
 <style lang="less">

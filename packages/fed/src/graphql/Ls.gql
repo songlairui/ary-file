@@ -1,0 +1,6 @@
+query lsfolder($dir: String, $first: Int, $limit: Int, $showHidden: Boolean) {
+  ls(dir: $dir, first: $first, limit: $limit, showHidden: $showHidden) {
+    name
+    isDir
+  }
+}
