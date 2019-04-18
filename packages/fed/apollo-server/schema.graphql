@@ -23,6 +23,20 @@ input MessageInput {
   text: String!
 }
 
+type WorkingDir {
+  title: String
+  path: String!
+  desc: String
+  sort: Int
+}
+
+input WorkingDirInput {
+  title: String
+  path: String!
+  desc: String
+  sort: Int
+}
+
 type File {
   id: ID!
   path: String!
@@ -42,6 +56,8 @@ type Query {
   # List of messages sent by users
   messages: [Message]
   uploads: [File]
+  workingDir(id: ID, path: String): WorkingDir
+  workingDirs: [WorkingDir]
 }
 
 type Mutation {
@@ -50,6 +66,9 @@ type Mutation {
   addMessage(input: MessageInput!): Message!
   singleUpload(file: Upload!): File!
   multipleUpload(files: [Upload!]!): [File!]!
+  addWorkingDir(input: WorkingDirInput): WorkingDir!
+  updateWorkingDir(input: WorkingDirInput): WorkingDir!
+  deleteWorkingDir(input: WorkingDirInput): WorkingDir!
 }
 
 type Subscription {

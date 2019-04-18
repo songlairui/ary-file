@@ -37,6 +37,16 @@ export default {
     },
     hello: (root, { name }) => `Hello ${name || 'World'}!`,
     messages: (root, args, { db }) => db.get('messages').value(),
+    workingDir: (root, { path }, { db }) => {
+      if (!path) {
+        throw new Error('error query: ' + path);
+      }
+      return db
+        .get('workingDir')
+        .find({ path })
+        .value();
+    },
+    workingDirs: (root, args, { db }) => db.get('workingDir').value(),
     uploads: (root, args, { db }) => db.get('uploads').value()
   },
 
@@ -64,7 +74,43 @@ export default {
 
     singleUpload: (root, { file }, { processUpload }) => processUpload(file),
     multipleUpload: (root, { files }, { processUpload }) =>
-      Promise.all(files.map(processUpload))
+      Promise.all(files.map(processUpload)),
+    addWorkingDir: (root, { input }, { pubsub, db }) => {
+      const workingDir = {
+        path: input.path,
+        desc: input.desc
+      };
+      const existed = db
+        .get('workingDir')
+        .find({ path: input.path })
+        .value();
+      if (existed) {
+        throw new Error('already');
+      }
+      db.get('workingDir')
+        .push(workingDir)
+        .last()
+        .write();
+      pubsub.publish('messages', { workingDirAdded: workingDir });
+      return workingDir;
+    },
+    updateWorkingDir: (root, { input }, { pubsub, db }) => {
+      const { path, desc } = input;
+      db.get('workingDir')
+        .find({ path })
+        .assign({ desc })
+        .write();
+      pubsub.publish('messages', { workingDirUpdated: workingDir });
+      return { path, desc };
+    },
+    deleteWorkingDir: (root, { input }, { pubsub, db }) => {
+      const { path } = input;
+      db.get('workingDir')
+        .remove({ path })
+        .write();
+      pubsub.publish('messages', { workingDirDeleted: { path } });
+      return { path };
+    }
   },
 
   Subscription: {

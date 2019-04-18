@@ -3,7 +3,7 @@ module.exports = {
 
   pluginOptions: {
     apollo: {
-      enableMocks: true,
+      enableMocks: false,
       enableEngine: false
     }
   },
