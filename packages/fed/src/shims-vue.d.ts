@@ -8,6 +8,11 @@ declare module '*.graphql' {
   const value: DocumentNode;
   export default value;
 }
+declare module '*.gql' {
+  import { DocumentNode } from 'graphql';
+  const content: DocumentNode;
+  export default content;
+}
 declare module 'vue-infinite-scroll' {}
 declare module 'vue-virtual-scroller' {
   const RecycleScroller: any;

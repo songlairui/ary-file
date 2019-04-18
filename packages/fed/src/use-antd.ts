@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import {
+  message,
   Input,
   Icon,
   Layout,
@@ -11,7 +12,8 @@ import {
   Col,
   Button,
   Checkbox,
-  message
+  Card,
+  Affix
 } from 'ant-design-vue';
 
 [
@@ -25,7 +27,9 @@ import {
   Row,
   Col,
   Button,
-  Checkbox
+  Checkbox,
+  Card,
+  Affix
 ].forEach(inst => {
   Vue.use(inst);
 });

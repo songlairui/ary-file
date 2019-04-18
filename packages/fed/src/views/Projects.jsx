@@ -10,23 +10,38 @@ export default {
     };
   },
   methods: {
+    async fetchDirs() {
+      const {
+        data: { workingDirs }
+      } = await this.$apollo.query({
+        query: QUERY_WORKING_DIRS
+      });
+      this.workingDirs = workingDirs;
+    },
     async delete(path) {
       await this.$apollo.mutate({
         mutation: DELETE_WORKING_DIR,
         variables: {
           input: { path }
+        },
+        update: (store, { data: { deleteWorkingDir } }) => {
+          const data = store.readQuery({ query: QUERY_WORKING_DIRS });
+          data.workingDirs = data.workingDirs.filter(
+            item => item.path !== deleteWorkingDir.path
+          );
+          store.writeQuery({ query: QUERY_WORKING_DIRS, data });
         }
       });
+      await this.fetchDirs();
       this.$message.info(`已删除${path}`);
+    },
+    pick(item) {
+      localStorage.setItem('home', item.path);
+      this.$router.push({ path: '/' });
     }
   },
   async created() {
-    const {
-      data: { workingDirs }
-    } = await this.$apollo.query({
-      query: QUERY_WORKING_DIRS
-    });
-    this.workingDirs = workingDirs;
+    await this.fetchDirs();
   },
 
   render() {
@@ -38,12 +53,15 @@ export default {
           <List.Item>
             <Popconfirm
               title="确定删除?"
+              trigger="hover"
               onConfirm={() => this.delete(item.path)}
             >
               <Button type="danger" shape="circle" icon="delete" />
             </Popconfirm>
-            <List.Item.Meta description={item.path}>
-              <a slot="title">{item.title}</a>
+            <List.Item.Meta>
+              <Button slot="title" onClick={this.pick.bind(this, item)} block>
+                {item.path}
+              </Button>
             </List.Item.Meta>
           </List.Item>
         )}

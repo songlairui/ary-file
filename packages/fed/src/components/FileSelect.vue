@@ -13,20 +13,30 @@
         <a-input placeholder="filter" v-model="filter"></a-input>
       </a-col>
     </a-row>
-
-    <a-list :dataSource="dataToShow">
+    <a-divider/>
+    <a-list
+      :dataSource="dataToShow"
+      :grid="{ gutter: 16, xs: 1, sm: 2, md: 4, lg: 4, xl: 6, xxl: 3 }"
+    >
       <a-list-item slot="renderItem" slot-scope="item, index">
-        <a-list-item-meta :description="item.name">
-          <a slot="title" @click="pick(item)">
-            <a-icon type="folder" theme="twoTone" twoToneColor="#52c41a" v-if="item.isDir"/>
-            <a-icon type="file" v-else/>
-            {{item.name}}
-          </a>
-        </a-list-item-meta>
-        <div>{{item.isDir}}</div>
+        <a-card>
+          <a-card-meta>
+            <div @click="pick(item)" slot="title">
+              <a-icon type="folder" theme="twoTone" twoToneColor="#52c41a" v-if="item.isDir"/>
+              <a-icon type="file" v-else/>
+              {{item.name}}
+            </div>
+            <span
+              slot="description"
+            >Vue? Nodejs? Go? React? Rxjs? Graphql? Nestjs? Webpack? Js? Hexo? Vuepress? Gatsby? Android? RN? Flutter? Docker? VPS?</span>
+          </a-card-meta>
+        </a-card>
       </a-list-item>
       <a-spin v-if="loading" class="demo-loading"/>
     </a-list>
+    <a-affix :offsetBottom="10">
+      <a-checkbox-group :options="plainOptions"/>
+    </a-affix>
   </div>
 </template>
 
@@ -35,6 +45,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import infiniteScroll from 'vue-infinite-scroll';
 import { QueryResult } from 'vue-apollo/types/vue-apollo';
 
+import QUERY_WORKING_DIRS from '../graphql/WorkingDirs.gql';
 import ADD_WORKING_DIR from '../graphql/AddWorkingDir.gql';
 
 const LS = require('../graphql/Ls.gql');
@@ -45,6 +56,17 @@ interface Result {
 interface FsItem {
   name: string;
   isDir: boolean;
+}
+
+interface WorkingDir {
+  title?: string;
+  path: string;
+  desc?: string;
+  sort?: number;
+}
+
+interface dirsResult {
+  workingDirs: WorkingDir[];
 }
 
 @Component({
@@ -59,6 +81,25 @@ export default class FileSelect extends Vue {
   data: FsItem[] = [];
   filter: string = '';
   showHidden: boolean = false;
+  plainOptions = [
+    'Vue',
+    'Nodejs',
+    'Go',
+    'React',
+    'Rxjs',
+    'Graphql',
+    'Nestjs',
+    'Webpack',
+    'Js',
+    'Hexo',
+    'Vuepress',
+    'Gatsby',
+    'Android',
+    'RN',
+    'Flutter',
+    'Docker',
+    'VPS'
+  ];
 
   get dataToShow() {
     return this.data.filter(
@@ -111,6 +152,13 @@ export default class FileSelect extends Vue {
           input: {
             path: this.dir
           }
+        },
+        update: (store, { data: { addWorkingDir } }) => {
+          const data: dirsResult = store.readQuery({
+            query: QUERY_WORKING_DIRS
+          }) || { workingDirs: [] };
+          data.workingDirs.push(addWorkingDir);
+          store.writeQuery({ query: QUERY_WORKING_DIRS, data });
         }
       });
       this.$message.info('Favourite Added');
